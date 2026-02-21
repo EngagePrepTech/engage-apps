@@ -778,10 +778,124 @@
         <div class="screen active" id="menuScreen">
             <div class="menu-section">
                 <p style="text-align: center; margin-bottom: 1.5rem; line-height: 1.5;">
-                    Try 5-10 minutes of drills to practice what we just covered.<br>
-                    <em>(Mix it up or focus on what needs more practice.)</em>
+                    Warm up for 3-5 minutes with any drills you'd like to practice.<br>
+                    <em>(We suggest including Division and Tables)</em>
                 </p>
 
+                <!-- QUICK RECALL SECTION -->
+                <div class="section-header" data-section="quickRecall">
+                    <span class="section-title">
+                        <span class="section-toggle">▼</span>
+                        Quick Recall
+                    </span>
+                    <button class="select-all-btn" data-section="quickRecall">Select All</button>
+                </div>
+                <div class="drill-options" data-section="quickRecall">
+                    <div class="drill-option" data-drill="rounding">
+                        <input type="checkbox" id="drill-rounding" value="rounding">
+                        <label for="drill-rounding">
+                            <div class="drill-name">Place Values &amp; Rounding</div>
+                            <div class="drill-desc">GRE/GMAT style rounding questions</div>
+                        </label>
+                    </div>
+                    <div class="drill-option" data-drill="tables">
+                        <input type="checkbox" id="drill-tables" value="tables">
+                        <label for="drill-tables">
+                            <div class="drill-name">Multiplication/Division Tables</div>
+                            <div class="drill-desc">×/÷ tables, perfect squares, zero variations</div>
+                        </label>
+                    </div>
+                    <div class="drill-option" data-drill="expTables">
+                        <input type="checkbox" id="drill-expTables" value="expTables">
+                        <label for="drill-expTables">
+                            <div class="drill-name">Exp/Root Tables</div>
+                            <div class="drill-desc">Powers and roots instant recall</div>
+                        </label>
+                    </div>
+                    <div class="drill-option" data-drill="expRules">
+                        <input type="checkbox" id="drill-expRules" value="expRules">
+                        <label for="drill-expRules">
+                            <div class="drill-name">Exponent Rules</div>
+                            <div class="drill-desc">Same base, zero, negatives, power-to-power</div>
+                        </label>
+                    </div>
+                    <div class="drill-option" data-drill="rootEstimate">
+                        <input type="checkbox" id="drill-rootEstimate" value="rootEstimate">
+                        <label for="drill-rootEstimate">
+                            <div class="drill-name">Root Estimation</div>
+                            <div class="drill-desc">Estimate between perfect squares/cubes</div>
+                        </label>
+                    </div>
+                </div>
+                <!-- COMPUTATION SECTION -->
+                <div class="section-header" data-section="computation">
+                    <span class="section-title">
+                        <span class="section-toggle">▼</span>
+                        Computation
+                    </span>
+                    <button class="select-all-btn" data-section="computation">Select All</button>
+                </div>
+                <div class="drill-options" data-section="computation">
+                    <div class="drill-option" data-drill="addition">
+                        <input type="checkbox" id="drill-addition" value="addition">
+                        <label for="drill-addition">
+                            <div class="drill-name">Addition (Split &amp; Stack)</div>
+                            <div class="drill-desc">3-digit + 3-digit numbers</div>
+                        </label>
+                    </div>
+                    <div class="drill-option" data-drill="subtraction">
+                        <input type="checkbox" id="drill-subtraction" value="subtraction">
+                        <label for="drill-subtraction">
+                            <div class="drill-name">Subtraction (Split &amp; Stack)</div>
+                            <div class="drill-desc">3-digit − 3-digit numbers</div>
+                        </label>
+                    </div>
+                    <div class="drill-option" data-drill="multiplication1x2">
+                        <input type="checkbox" id="drill-multiplication1x2" value="multiplication1x2">
+                        <label for="drill-multiplication1x2">
+                            <div class="drill-name">Multiplication (Split &amp; Distribute)</div>
+                            <div class="drill-desc">1-digit × 2-3-digit numbers</div>
+                        </label>
+                    </div>
+                    <div class="drill-option" data-drill="multiplication2x2">
+                        <input type="checkbox" id="drill-multiplication2x2" value="multiplication2x2">
+                        <label for="drill-multiplication2x2">
+                            <div class="drill-name">Multiplication (FOIL)</div>
+                            <div class="drill-desc">2-digit × 2-digit numbers</div>
+                        </label>
+                    </div>
+                    <div class="drill-option" data-drill="division">
+                        <input type="checkbox" id="drill-division" value="division">
+                        <label for="drill-division">
+                            <div class="drill-name">Division (Split &amp; Distribute)</div>
+                            <div class="drill-desc">Lazy multiples approach</div>
+                        </label>
+                    </div>
+                </div>
+                <!-- ESTIMATION SECTION -->
+                <div class="section-header" data-section="estimation">
+                    <span class="section-title">
+                        <span class="section-toggle">▼</span>
+                        Estimation
+                    </span>
+                    <button class="select-all-btn" data-section="estimation">Select All</button>
+                </div>
+                <div class="drill-options" data-section="estimation">
+                    <div class="drill-option" data-drill="estimateAdd">
+                        <input type="checkbox" id="drill-estimateAdd" value="estimateAdd">
+                        <label for="drill-estimateAdd">
+                            <div class="drill-name">Addition (Exchange)</div>
+                            <div class="drill-desc">Make one number pretty by trading</div>
+                        </label>
+                    </div>
+                    <div class="drill-option" data-drill="estimateSub">
+                        <input type="checkbox" id="drill-estimateSub" value="estimateSub">
+                        <label for="drill-estimateSub">
+                            <div class="drill-name">Subtraction (Slide)</div>
+                            <div class="drill-desc">Slide both numbers together</div>
+                        </label>
+                    </div>
+                </div>
                 <!-- TOPICS SECTION -->
                 <div class="section-header" data-section="topics">
                     <span class="section-title">
@@ -791,6 +905,20 @@
                     <button class="select-all-btn" data-section="topics">Select All</button>
                 </div>
                 <div class="drill-options" data-section="topics">
+                    <div class="drill-option" data-drill="divisibility">
+                        <input type="checkbox" id="drill-divisibility" value="divisibility">
+                        <label for="drill-divisibility">
+                            <div class="drill-name">Divisibility, Factors, and Primes</div>
+                            <div class="drill-desc">Factor recognition, prime factorization, divisibility rules</div>
+                        </label>
+                    </div>
+                    <div class="drill-option" data-drill="fractions">
+                        <input type="checkbox" id="drill-fractions" value="fractions">
+                        <label for="drill-fractions">
+                            <div class="drill-name">Fraction Mechanics</div>
+                            <div class="drill-desc">Reduce, add, subtract, multiply, divide</div>
+                        </label>
+                    </div>
                     <div class="drill-option" data-drill="stats">
                         <input type="checkbox" id="drill-stats" value="stats">
                         <label for="drill-stats">

@@ -4358,7 +4358,7 @@
             if (currentDrill === 'rounding' || currentDrill === 'stats' || isConversion) {
                 userAnswer = parseFloat(inputVal);
             } else {
-                // Use parseFloat so decimal inputs like "27.25" dont get truncated to 27
+                // Use parseFloat so decimal inputs dont get truncated
                 userAnswer = parseFloat(inputVal);
             }
             if (isNaN(userAnswer)) return;
