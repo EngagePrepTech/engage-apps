@@ -859,6 +859,7 @@
                 </div>
             </div>
             
+            <div id="drillModeLabel" style="display: none; text-align: center; margin-bottom: 0.5rem; padding: 0.4rem 1rem; background: rgba(45, 138, 171, 0.3); border: 1px solid rgba(45, 138, 171, 0.6); border-radius: 8px; font-size: 1rem; font-weight: 600; color: #7dd3fc; letter-spacing: 0.05em;">≈ ESTIMATE — don't solve exactly!</div>
             <div class="problem" id="problem">---</div>
             <div class="data-set" id="dataSet" style="display: none; font-family: monospace; font-size: 1.2rem; margin: 0.5rem 0; opacity: 0.9;"></div>
             <div class="fraction-problem" id="fractionProblem" style="display: none;"></div>
@@ -954,6 +955,10 @@
         let currentDrill = null;
         let num1, num2, correctAnswer;
         let waitingForContinue = false;
+            
+            // Show/hide estimation label
+            const isEstimationDrill = (currentDrill === 'estimateAdd' || currentDrill === 'estimateSub' || currentDrill === 'estimateMult');
+            drillModeLabel.style.display = isEstimationDrill ? 'block' : 'none';
         let threeDigitQuestions = []; // Track which question numbers should be 3-digit
         let currentQuestionNumber = 0;
         
@@ -1171,6 +1176,7 @@
         const resultsScreen = document.getElementById('resultsScreen');
         const pageTitle = document.getElementById('pageTitle');
         const startBtn = document.getElementById('startBtn');
+        const drillModeLabel = document.getElementById('drillModeLabel');
         const numQuestionsSelect = document.getElementById('numQuestions');
         const timeLimitSelect = document.getElementById('timeLimit');
         const drillOptions = document.querySelectorAll('.drill-option');
@@ -3258,27 +3264,38 @@
                 };
             } else if (statsType === 'mode') {
                 showInputType('single');
-                // Generate a set with a clear mode
-                const baseNums = [];
-                for (let i = 0; i < 3; i++) {
-                    baseNums.push(Math.floor(Math.random() * 15) + 2);
-                }
-                const modeValue = baseNums[Math.floor(Math.random() * baseNums.length)];
-                const repeatCount = Math.floor(Math.random() * 2) + 2;
-                const nums = [...baseNums];
-                for (let i = 1; i < repeatCount; i++) nums.push(modeValue);
-                for (let i = 0; i < 2; i++) {
-                    let newNum;
-                    do { newNum = Math.floor(Math.random() * 15) + 2; }
-                    while (nums.filter(n => n === newNum).length >= repeatCount);
-                    nums.push(newNum);
-                }
+                // Generate a set with a UNIQUE mode (no bimodal)
+                let nums, modeValue, freq;
+                let attempts = 0;
+                do {
+                    const baseNums = [];
+                    for (let i = 0; i < 3; i++) {
+                        baseNums.push(Math.floor(Math.random() * 15) + 2);
+                    }
+                    modeValue = baseNums[Math.floor(Math.random() * baseNums.length)];
+                    const repeatCount = Math.floor(Math.random() * 2) + 2;
+                    nums = [...baseNums];
+                    for (let i = 1; i < repeatCount; i++) nums.push(modeValue);
+                    for (let i = 0; i < 2; i++) {
+                        let newNum;
+                        do { newNum = Math.floor(Math.random() * 15) + 2; }
+                        while (nums.filter(n => n === newNum).length >= repeatCount);
+                        nums.push(newNum);
+                    }
+                    // Verify unique mode
+                    freq = {};
+                    nums.forEach(n => freq[n] = (freq[n] || 0) + 1);
+                    const maxFreq = Math.max(...Object.values(freq));
+                    const modes = Object.keys(freq).filter(k => freq[k] === maxFreq);
+                    attempts++;
+                } while (Object.keys(freq).filter(k => freq[k] === Math.max(...Object.values(freq))).length > 1 && attempts < 20);
                 shuffleArray(nums);
                 problemEl.textContent = 'What is the mode?';
                 dataSetEl.textContent = nums.join(', ');
                 dataSetEl.style.display = 'block';
                 correctAnswer = modeValue;
-                const freq = {};
+                // Recalculate freq after shuffle for explanation
+                freq = {};
                 nums.forEach(n => freq[n] = (freq[n] || 0) + 1);
                 statsExplanationData = { type: 'mode', nums: nums, freq: freq, answer: modeValue };
             } else if (statsType === 'stdDev') {
