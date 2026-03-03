@@ -1076,10 +1076,6 @@
         let currentDrill = null;
         let num1, num2, correctAnswer;
         let waitingForContinue = false;
-            
-            // Show/hide estimation label
-            const isEstimationDrill = (currentDrill === 'estimateAdd' || currentDrill === 'estimateSub' || currentDrill === 'estimateMult');
-            drillModeLabel.style.display = isEstimationDrill ? 'block' : 'none';
         let threeDigitQuestions = []; // Track which question numbers should be 3-digit
         let currentQuestionNumber = 0;
         
@@ -1762,6 +1758,11 @@
                 currentDrill = selectedDrills[Math.floor(Math.random() * selectedDrills.length)];
             }
             
+            
+            // Show/hide estimation label
+            const isEstimationDrill = (currentDrill === 'estimateAdd' || currentDrill === 'estimateSub' || currentDrill === 'estimateMult');
+            drillModeLabel.style.display = isEstimationDrill ? 'block' : 'none';
+
             if (currentDrill === 'addition') {
                 num1 = Math.floor(Math.random() * 900) + 100;
                 num2 = Math.floor(Math.random() * 900) + 100;
