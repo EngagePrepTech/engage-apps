@@ -780,7 +780,7 @@
                 <p style="text-align: center; margin-bottom: 1.5rem; line-height: 1.5;">
                     Practice any skill from the Fundamentals course.<br>
                     Warm up for 3-5 minutes with any drills you'd like to practice.<br>
-                    <em>(We suggest Fraction ↔ Decimal and Multiplication/Division Tables)</em>
+                    <em>(We suggest Combining Like Terms and Percent Arithmetic)</em>
                 </p>
 
                 <!-- QUICK RECALL SECTION -->
@@ -942,11 +942,11 @@
                             <div class="drill-desc">Simplify expressions by combining like terms</div>
                         </label>
                     </div>
-                    <div class="drill-option" data-drill="equations">
-                        <input type="checkbox" id="drill-equations" value="equations">
-                        <label for="drill-equations">
-                            <div class="drill-name">Equations & Inequalities</div>
-                            <div class="drill-desc">Solve for x — watch for sign flips!</div>
+                    <div class="drill-option" data-drill="percentArith">
+                        <input type="checkbox" id="drill-percentArith" value="percentArith">
+                        <label for="drill-percentArith">
+                            <div class="drill-name">Percent Arithmetic</div>
+                            <div class="drill-desc">Benchmarks, percent of, percent change</div>
                         </label>
                     </div>
                     <div class="drill-option" data-drill="pemdas">
@@ -5277,8 +5277,6 @@
                 solutionEl.innerHTML = buildConversionExplanation();
             } else if (currentDrill === 'pemdas') {
                 solutionEl.innerHTML = buildPemdasExplanation();
-            } else if (currentDrill === 'combiningLikeTerms') {
-                solutionEl.innerHTML = buildCombiningExplanation();
             } else if (currentDrill === 'equations') {
                 solutionEl.innerHTML = buildEquationExplanation();
             } else if (currentDrill === 'percentArith') {
