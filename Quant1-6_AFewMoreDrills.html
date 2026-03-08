@@ -1209,7 +1209,7 @@
             const checkbox = option.querySelector('input[type="checkbox"]');
             
             option.addEventListener('click', (e) => {
-                if (e.target !== checkbox) {
+                if (e.target !== checkbox && !e.target.closest('label')) {
                     checkbox.checked = !checkbox.checked;
                 }
                 option.classList.toggle('selected', checkbox.checked);
@@ -1299,6 +1299,7 @@
         mcBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 if (waitingForContinue) return;
+                if (btn.style.display === 'none' || !btn.querySelector('.mc-text').textContent.trim()) return;
                 const choice = btn.dataset.choice;
                 checkMultipleChoice(choice);
             });

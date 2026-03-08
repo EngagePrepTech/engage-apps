@@ -935,6 +935,13 @@
                             <div class="drill-desc">Mean, median, mode, range, standard deviation</div>
                         </label>
                     </div>
+                    <div class="drill-option" data-drill="pemdas">
+                        <input type="checkbox" id="drill-pemdas" value="pemdas">
+                        <label for="drill-pemdas">
+                            <div class="drill-name">PERMDAS</div>
+                            <div class="drill-desc">Order of operations, negatives, absolute value</div>
+                        </label>
+                    </div>
                     <div class="drill-option" data-drill="combiningLikeTerms">
                         <input type="checkbox" id="drill-combiningLikeTerms" value="combiningLikeTerms">
                         <label for="drill-combiningLikeTerms">
@@ -947,13 +954,6 @@
                         <label for="drill-percentArith">
                             <div class="drill-name">Percent Arithmetic</div>
                             <div class="drill-desc">Benchmarks, percent of, percent change</div>
-                        </label>
-                    </div>
-                    <div class="drill-option" data-drill="pemdas">
-                        <input type="checkbox" id="drill-pemdas" value="pemdas">
-                        <label for="drill-pemdas">
-                            <div class="drill-name">PERMDAS</div>
-                            <div class="drill-desc">Order of operations, negatives, absolute value</div>
                         </label>
                     </div>
                 </div>
@@ -1368,7 +1368,7 @@
             const checkbox = option.querySelector('input[type="checkbox"]');
             
             option.addEventListener('click', (e) => {
-                if (e.target !== checkbox) {
+                if (e.target !== checkbox && !e.target.closest('label')) {
                     checkbox.checked = !checkbox.checked;
                 }
                 option.classList.toggle('selected', checkbox.checked);
@@ -1458,6 +1458,7 @@
         mcBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 if (waitingForContinue) return;
+                if (btn.style.display === 'none' || !btn.querySelector('.mc-text').textContent.trim()) return;
                 const choice = btn.dataset.choice;
                 checkMultipleChoice(choice);
             });
@@ -3631,8 +3632,6 @@
                 [mcChoices[i], mcChoices[j]] = [mcChoices[j], mcChoices[i]];
             }
             
-            showInputType('multipleChoice');
-            
             // Populate buttons
             mcChoices.forEach((choice, i) => {
                 if (i < mcBtns.length) {
@@ -3771,17 +3770,17 @@
         let equationData = {};
         
         function generateEquations() {
-            // 70% equations, 30% inequalities
+            const vars = ['a','b','c','d','e','f','g','h','k','L','m','n','p','q','t','w','x','y','z'];
+            const eqVar = vars[Math.floor(Math.random() * vars.length)];
             const isInequality = Math.random() < 0.3;
-            
             if (isInequality) {
-                generateInequality();
+                generateInequality(eqVar);
             } else {
-                generateEquation();
+                generateEquation(eqVar);
             }
         }
         
-        function generateEquation() {
+        function generateEquation(V) {
             showInputType('single');
             
             // Types with escalating difficulty
@@ -3800,22 +3799,22 @@
                     const a = Math.floor(Math.random() * 8) + 2;
                     answer = Math.floor(Math.random() * 12) + 1;
                     const b = a * answer;
-                    equation = a + 'x = ' + b;
-                    steps = [equation, 'x = ' + b + ' ÷ ' + a, 'x = ' + answer];
+                    equation = a + V + ' = ' + b;
+                    steps = [equation, V + ' = ' + b + ' ÷ ' + a, V + ' = ' + answer];
                 } else if (subtype === 1) {
                     // x + a = b
                     const a = Math.floor(Math.random() * 15) + 3;
                     answer = Math.floor(Math.random() * 20) + 1;
                     const b = answer + a;
-                    equation = 'x + ' + a + ' = ' + b;
-                    steps = [equation, 'x = ' + b + ' − ' + a, 'x = ' + answer];
+                    equation = V + ' + ' + a + ' = ' + b;
+                    steps = [equation, V + ' = ' + b + ' − ' + a, V + ' = ' + answer];
                 } else {
                     // x - a = b
                     const a = Math.floor(Math.random() * 10) + 2;
                     answer = Math.floor(Math.random() * 20) + a;
                     const b = answer - a;
-                    equation = 'x − ' + a + ' = ' + b;
-                    steps = [equation, 'x = ' + b + ' + ' + a, 'x = ' + answer];
+                    equation = V + ' − ' + a + ' = ' + b;
+                    steps = [equation, V + ' = ' + b + ' + ' + a, V + ' = ' + answer];
                 }
             } else if (type === 'twoStep') {
                 // ax + b = c or ax - b = c
@@ -3826,9 +3825,9 @@
                 const c = isAdd ? a * answer + b : a * answer - b;
                 const op = isAdd ? '+' : '−';
                 const invOp = isAdd ? '−' : '+';
-                equation = a + 'x ' + op + ' ' + b + ' = ' + c;
+                equation = a + V + ' ' + op + ' ' + b + ' = ' + c;
                 const afterFirst = isAdd ? c - b : c + b;
-                steps = [equation, a + 'x = ' + c + ' ' + invOp + ' ' + b, a + 'x = ' + afterFirst, 'x = ' + afterFirst + ' ÷ ' + a, 'x = ' + answer];
+                steps = [equation, a + V + ' = ' + c + ' ' + invOp + ' ' + b, a + V + ' = ' + afterFirst, V + ' = ' + afterFirst + ' ÷ ' + a, V + ' = ' + answer];
             } else if (type === 'bothSides') {
                 // ax + b = cx + d
                 const a = Math.floor(Math.random() * 5) + 3;
@@ -3837,10 +3836,10 @@
                 answer = Math.floor(Math.random() * 8) + 1;
                 const b = Math.floor(Math.random() * 10) + 1;
                 const d = a * answer + b - c * answer;
-                equation = a + 'x + ' + b + ' = ' + c + 'x + ' + d;
+                equation = a + V + ' + ' + b + ' = ' + c + V + ' + ' + d;
                 const newCoeff = a - c;
                 const newConst = d - b;
-                steps = [equation, (a-c) + 'x + ' + b + ' = ' + d, (a-c) + 'x = ' + newConst, 'x = ' + answer];
+                steps = [equation, (a-c) + V + ' + ' + b + ' = ' + d, (a-c) + V + ' = ' + newConst, V + ' = ' + answer];
             } else if (type === 'withDistribution') {
                 // a(x + b) = c
                 const a = Math.floor(Math.random() * 4) + 2;
@@ -3851,12 +3850,12 @@
                 const bSigned = isAdd ? b : -b;
                 const op = isAdd ? '+ ' + b : '− ' + b;
                 const cVal = a * (answer + bSigned);
-                equation = a + '(x ' + op + ') = ' + cVal;
-                const expanded = a + 'x ' + (isAdd ? '+ ' + (a*b) : '− ' + (a*b)) + ' = ' + cVal;
-                steps = ['Distribute: ' + expanded, a + 'x = ' + (a * answer), 'x = ' + answer];
+                equation = a + '(' + V + ' ' + op + ') = ' + cVal;
+                const expanded = a + V + ' ' + (isAdd ? '+ ' + (a*b) : '− ' + (a*b)) + ' = ' + cVal;
+                steps = ['Distribute: ' + expanded, a + V + ' = ' + (a * answer), V + ' = ' + answer];
             }
             
-            problemEl.innerHTML = 'Solve for x:';
+            problemEl.innerHTML = 'Solve for ' + V + ':';
             dataSetEl.innerHTML = equation;
             dataSetEl.style.display = 'block';
             correctAnswer = answer;
@@ -3864,7 +3863,7 @@
             equationData = { type: 'equation', equation, answer, steps, isInequality: false };
         }
         
-        function generateInequality() {
+        function generateInequality(V) {
             showInputType('multipleChoice');
             
             // Generate inequality that requires sign flip decision
@@ -3884,8 +3883,8 @@
                 const symbols = ['>', '<', '≥', '≤'];
                 symbol = symbols[Math.floor(Math.random() * symbols.length)];
                 const c = a * answer + b; // This makes the boundary exact
-                inequalityStr = a + 'x + ' + b + ' ' + symbol + ' ' + c;
-                steps = [inequalityStr, a + 'x ' + symbol + ' ' + (c - b), 'x ' + symbol + ' ' + answer];
+                inequalityStr = a + V + ' + ' + b + ' ' + symbol + ' ' + c;
+                steps = [inequalityStr, a + V + ' ' + symbol + ' ' + (c - b), V + ' ' + symbol + ' ' + answer];
             } else {
                 // -ax + b > c — negative coefficient, MUST FLIP
                 const a = Math.floor(Math.random() * 4) + 2;
@@ -3893,27 +3892,27 @@
                 const b = Math.floor(Math.random() * 15) + 5;
                 const origSymbol = ['>', '<'][Math.floor(Math.random() * 2)];
                 const c = -a * answer + b;
-                inequalityStr = '−' + a + 'x + ' + b + ' ' + origSymbol + ' ' + c;
+                inequalityStr = '−' + a + V + ' + ' + b + ' ' + origSymbol + ' ' + c;
                 // Flip the symbol
                 const flipped = origSymbol === '>' ? '<' : '>';
                 symbol = flipped;
-                steps = [inequalityStr, '−' + a + 'x ' + origSymbol + ' ' + (c - b), '−' + a + 'x ' + origSymbol + ' −' + (a * answer), 'Divide by −' + a + ' → FLIP sign', 'x ' + flipped + ' ' + answer];
+                steps = [inequalityStr, '−' + a + V + ' ' + origSymbol + ' ' + (c - b), '−' + a + V + ' ' + origSymbol + ' −' + (a * answer), 'Divide by −' + a + ' → FLIP sign', V + ' ' + flipped + ' ' + answer];
             }
             
-            const correctText = 'x ' + symbol + ' ' + answer;
+            const correctText = V + ' ' + symbol + ' ' + answer;
             
             // Generate wrong answers
             const allSymbols = ['>', '<', '≥', '≤'];
             let wrongAnswers = [];
             // Opposite direction
             const opposite = symbol === '>' ? '<' : symbol === '<' ? '>' : symbol === '≥' ? '≤' : '≥';
-            wrongAnswers.push('x ' + opposite + ' ' + answer);
+            wrongAnswers.push(V + ' ' + opposite + ' ' + answer);
             // Wrong number
-            wrongAnswers.push('x ' + symbol + ' ' + (answer + 2));
+            wrongAnswers.push(V + ' ' + symbol + ' ' + (answer + 2));
             // Opposite direction + wrong number
-            wrongAnswers.push('x ' + opposite + ' ' + (answer - 1));
+            wrongAnswers.push(V + ' ' + opposite + ' ' + (answer - 1));
             
-            problemEl.innerHTML = 'Solve:';
+            problemEl.innerHTML = 'Solve for ' + V + ':';
             dataSetEl.innerHTML = inequalityStr;
             dataSetEl.style.display = 'block';
             
